@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyoKrishi - Connect</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+
+</head>
+
+<body>
+  <section class="chat">
+    <div class="container">
+
+      <div class="heading">
+        <img class="ayologo" src="/ayogo.png" alt="ayokrishi_logo">
+        <label for="heading">AyoKrishi - Connect</label>
+      </div>
+
+      <div class="conversation">
+        <!-- <div class="message message-left">
+          Harshil: Hi, How are you?
+        </div>
+        <div class="message message-right">
+          Ayosh: Great! And you?
+        </div> -->
+      </div>
+
+      <div class="send">
+        <form action="#" id="send-container">
+          <!-- <input type="text" name="messageInput" id="messageInput" placeholder="Enter your message here..."> -->
+          <textarea class="message-input" name="messageInput" id="messageInput"
+            placeholder="Enter your message here..."></textarea>
+
+          <button class="send-button" type="submit"><img class="send-leaf" src="/leaf.png" alt=""></button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+  <!-- <script>
+    // Get the message input element
+    const messageInput = document.getElementById('messageInput');
+  
+    // Function to resize the input box based on its content
+    function resizeInput() {
+      messageInput.style.height = 'auto';
+      messageInput.style.height = messageInput.scrollHeight + 'px';
+    }
+  
+    // Attach an event listener to the input element
+    messageInput.addEventListener('input', resizeInput);
+  </script> -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.1/socket.io.js"
+    integrity="sha512-Z6C1p1NIexPj5MsVUunW4pg7uMX6/TT3CUVldmjXx2kpip1eZcrAnxIusDxyFIikyM9A61zOVNgvLr/TGudOQg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- <script src="./client.js"></script> -->
+  <script>
+    const socket = io('http://localhost:8004', { transports: ['websocket', 'polling'] });
+    // port is required while testing on local server
+
+    const form = document.getElementById('send-container');
+    const messageInput = document.getElementById('messageInput');
+    const conversation = document.querySelector('.conversation');
+
+    const appendMessage = (message, className) => {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message', className);
+      messageElement.textContent = message;
+      conversation.appendChild(messageElement);
+      conversation.scrollTop = conversation.scrollHeight; // Automatically scroll to the bottom
+      playNotificationSound(); // Play notification sound
+    };
+
+    const playNotificationSound = () => {
+      const audio = new Audio('/notification.mp3');
+      audio.play();
+    };
+
+    const getName = () => {
+      const name = prompt("Enter your name") || 'Anonymous';
+      return name;
+    };
+
+    const username = getName();
+    socket.emit('new-user-joined', username);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const message = messageInput.value.trim();
+      if (message !== '') {
+        socket.emit('send-message', message);
+        appendMessage(`You: ${message}`, 'message-right');
+        messageInput.value = '';
+      }
+    });
+
+    socket.on('receive-message', ({ message, name }) => {
+      const formattedMessage = `${name}: ${message}`;
+      appendMessage(formattedMessage, 'message-left');
+    });
+
+    socket.on('user-joined', (name) => {
+      const message = `${name} joined the chat`;
+      appendMessage(message, 'message-left');
+    });
+
+    socket.on('user-left', (name) => {
+      const message = `${name} left the chat`;
+      appendMessage(message, 'message-left');
+    });
+
+  </script>
+</body>
+
+</html>
