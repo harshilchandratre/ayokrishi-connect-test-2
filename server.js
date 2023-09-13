@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = 8004;
+const PORT = process.env.PORT || 3001; // Use 3001 as the default port
 server.listen(PORT, () => {
-  console.log(`Server is running on port http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
