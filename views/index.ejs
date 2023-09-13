@@ -58,7 +58,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- <script src="./client.js"></script> -->
   <script>
-    const socket = io('http://localhost:3001', { transports: ['websocket', 'polling'] });
+    const socket = io();
     // port is required while testing on local server
 
     const form = document.getElementById('send-container');
