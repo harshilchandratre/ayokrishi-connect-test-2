@@ -1,6 +1,6 @@
 <!-- Add a banner image or logo -->
 <p align="center">
-  <img src="https://drive.google.com/file/d/1jsKAqjovzExUgIRe5fSp9gqPmjagQUyl/view?usp=drive_link" alt="AyoKrishi - Connect Logo">AyoKrishi - Connect
+  <img src="/ayogo.png" alt="AyoKrishi - Connect Logo">AyoKrishi - Connect
 </p>
 
 # AyoKrishi - Connect
