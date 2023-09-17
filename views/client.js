@@ -1,22 +1,17 @@
 const socket = io('http://localhost:8004', { transports: ['websocket', 'polling'] });
+// port is required while testing on local server
 
 const form = document.getElementById('send-container');
 const messageInput = document.getElementById('messageInput');
 const conversation = document.querySelector('.conversation');
-
-const getRandomEmoji = () => {
-  const emojis = ['🙌', '😃', '👋', '🎉', '💬', '🌟', '🍀', '🙏', '🤪', '🍁', '🥰', '👻', '🤠', '👀', '🫡']; // Add more emojis as needed
-  const randomIndex = Math.floor(Math.random() * emojis.length);
-  return emojis[randomIndex];
-};
 
 const appendMessage = (message, className) => {
   const messageElement = document.createElement('div');
   messageElement.classList.add('message', className);
   messageElement.textContent = message;
   conversation.appendChild(messageElement);
-  conversation.scrollTop = conversation.scrollHeight;
-  playNotificationSound();
+  conversation.scrollTop = conversation.scrollHeight; // Automatically scroll to the bottom
+  playNotificationSound(); // Play notification sound
 };
 
 const playNotificationSound = () => {
@@ -24,13 +19,12 @@ const playNotificationSound = () => {
   audio.play();
 };
 
-const getNameWithEmoji = () => {
+const getName = () => {
   const name = prompt("Enter your name") || 'Anonymous';
-  const randomEmoji = getRandomEmoji();
-  return `${name}${randomEmoji}`;
+  return name;
 };
 
-const username = getNameWithEmoji();
+const username = getName();
 socket.emit('new-user-joined', username);
 
 form.addEventListener('submit', (e) => {
