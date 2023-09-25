@@ -1,4 +1,4 @@
-const socket = io('http://localhost:8004', { transports: ['websocket', 'polling'] });
+const socket = io('http://localhost:3001', { transports: ['websocket', 'polling'] });
 // port is required while testing on local server
 
 const form = document.getElementById('send-container');

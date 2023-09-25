@@ -3,25 +3,24 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, { cors: { origin: '*' } });
 
-// const { auth } = require('express-openid-connect');
+require('dotenv').config();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const feedbackRoute = require('./routes/feedback');
 
-// const config = {
-//   authRequired: false,
-//   auth0Logout: true,
-//   secret: 'a long, randomly-generated string stored in env',
-//   baseURL: 'https://ayokrishi-connect-test-2.onrender.com',
-//   clientID: 'uUhiLclkrVFddM3s1qbtS6SwlWqnJb3U',
-//   issuerBaseURL: 'https://dev-n13bzjhem3ppzfcj.us.auth0.com'
-// };
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-// // auth router attaches /login, /logout, and /callback routes to the baseURL
-// app.use(auth(config));
 
-// // req.isAuthenticated is provided from the auth router
-// app.get('/', (req, res) => {
-//   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-// });
 
+// Middleware to parse form data
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Use the feedback route
+app.use('/feedback', feedbackRoute);
 
 const users = {};
 

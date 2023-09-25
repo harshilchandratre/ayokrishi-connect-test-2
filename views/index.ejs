@@ -16,6 +16,7 @@
       <div class="heading">
         <img class="ayologo" src="/ayogo.png" alt="ayokrishi_logo">
         <label for="heading">AyoKrishi - Connect</label>
+        <button class="feedback-button" type="button"><img class="send-leaf" src="/feedback.png" alt=""></button>
       </div>
 
       <div class="conversation">
@@ -33,11 +34,49 @@
           <textarea class="message-input" name="messageInput" id="messageInput"
             placeholder="Enter your message here..."></textarea>
 
+
           <button class="send-button" type="submit"><img class="send-leaf" src="/leaf.png" alt=""></button>
+
         </form>
       </div>
 
+
     </div>
+
+    <!-- pop up feedback -->
+
+    <div id="feedback-popup" class="feedback-popup" >
+      <!-- <div class="feedback-container"> -->
+      <div class="feedback-logo">
+        <img src="./ayogo.png" alt="ayokrishi_logo">
+      </div>
+      <h1 class="feedback-title">AyoKrishi - Feedback</h1>
+      <form method="post" id="feedback-form" action="/feedback/submit">
+        <label class="feedback-label" for="name">Name</label>
+        <input class="feedback-input" type="text" name="name" id="name" placeholder="Enter your name" required>
+
+        <label class="feedback-label" for="email">Email</label>
+        <input class="feedback-input" type="text" name="email" id="email" placeholder="Enter your email" required>
+
+        <label class="feedback-label" for="suggestion">Suggestions</label>
+        <textarea class="feedback-textarea" name="suggestion" id="suggestion" placeholder="Enter your suggestions"
+          required></textarea>
+
+        <button class="btn" type="submit">SEND</button>
+        <br>
+        <button class="btn" type="reset">RESET</button>
+
+      </form>
+      <span class="close" id="close-feedback-popup">&times;</span>
+      <!-- </div> -->
+
+    </div>
+
+    <!-- pop up feedback -->
+
+
+
+
   </section>
   <!-- <script>
     // Get the message input element
@@ -112,6 +151,73 @@
       const message = `${name} left the chat`;
       appendMessage(message, 'message-left');
     });
+
+
+    // feedback popup functionality
+
+    // Get references to the button and the feedback popup
+    const feedbackButton = document.querySelector('.feedback-button');
+    const feedbackPopup = document.getElementById('feedback-popup');
+    const closefeedbackPopup = document.getElementById('close-feedback-popup');
+
+    // Function to open the feedback popup
+    function openFeedbackPopup() {
+      feedbackPopup.style.display = 'block';
+    }
+
+    // Function to close the feedback popup
+    function closeFeedbackPopup() {
+      feedbackPopup.style.display = 'none';
+    }
+
+    // Add click event listeners to the button and close button
+    feedbackButton.addEventListener('click', openFeedbackPopup);
+    closefeedbackPopup.addEventListener('click', closeFeedbackPopup);
+
+    // Optional: Close the popup if the user clicks outside of it
+    window.addEventListener('click', (event) => {
+      if (event.target === feedbackPopup) {
+        closeFeedbackPopup();
+      }
+    });
+
+    // Function to clear the form fields and close the feedback popup
+    function clearAndCloseFeedbackPopup() {
+      const feedbackForm = document.getElementById('feedback-form');
+      feedbackForm.reset(); // Clear form fields
+      closeFeedbackPopup(); // Close the popup
+    }
+
+    // Prevent the form submission from refreshing the page
+    // Prevent the form submission from refreshing the page
+    feedbackForm.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent the default form submission behavior
+
+      const formData = new FormData(feedbackForm);
+
+      fetch('/feedback/submit', {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to submit feedback');
+          }
+        })
+        .then((data) => {
+          // Handle success, e.g., display a success message
+          console.log(data);
+          closeFeedbackPopup();
+        })
+        .catch((error) => {
+          // Handle error, e.g., display an error message
+          console.error(error);
+        });
+    });
+
+
 
   </script>
 </body>
